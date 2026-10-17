@@ -57,15 +57,21 @@ Admin-Konto mit zweitem Faktor, Datenschutz, Artikel (mit Startvorlage) und Mitg
 **Umziehen** (z. B. von Vercel auf den eigenen Server) geht über Verwaltung → Einstellungen →
 **Sichern & Umziehen**.
 
+## Fragen und Hilfe
+
+- **Fragen zur Einrichtung oder Nutzung:** in den [Discussions](https://github.com/floddel/vereinsdeckel/discussions) –
+  dort können sich auch Vereine gegenseitig helfen.
+- **Fehler gefunden oder eine Idee?** Gern als [Issue](https://github.com/floddel/vereinsdeckel/issues).
+- **Sicherheitslücken** bitte vertraulich melden, siehe [SECURITY.md](SECURITY.md).
+
+Der Vereinsdeckel ist ein Freizeitprojekt. Antworten können ein paar Tage dauern – danke für eure Geduld.
+
 ## Unterstützen
 
 Der Vereinsdeckel ist kostenlos und wird in der Freizeit entwickelt. Wenn er eurem Verein hilft:
 
 - [GitHub Sponsors](https://github.com/sponsors/floddel)
 - [PayPal](https://paypal.me/xygoht)
-
-Fehler gefunden oder eine Idee? Gern als [Issue](https://github.com/floddel/vereinsdeckel/issues).
-Sicherheitslücken bitte vertraulich melden, siehe [SECURITY.md](SECURITY.md).
 
 ## Lizenz
 
