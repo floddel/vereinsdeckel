@@ -1,0 +1,42 @@
+# Für Kopien der Vereine (z. B. über „Mit Vercel installieren“ angelegt):
+# Reiter Actions → „Update holen“ → „Run workflow“ holt die neueste Version des Vereinsdeckels.
+# Vercel veröffentlicht sie danach automatisch.
+name: Update holen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    if: github.repository != 'floddel/vereinsdeckel'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Neueste Version übernehmen
+        run: |
+          git config user.name "Vereinsdeckel Update"
+          git config user.email "update@users.noreply.github.com"
+          git remote add upstream https://github.com/floddel/vereinsdeckel.git
+          git fetch upstream --tags
+          # neueste veröffentlichte Version (Tag v…), sonst main
+          ZIEL=$(git tag -l 'v*.*.*' --sort=-v:refname | head -1)
+          ZIEL=${ZIEL:-upstream/main}
+          if git diff --quiet HEAD "$ZIEL" -- . ":(exclude).github/workflows"; then
+            echo "Schon auf dem neuesten Stand ($ZIEL)."
+            exit 0
+          fi
+          echo "Übernehme $ZIEL"
+          # Vorgeschichte verbinden (auch bei einer Kopie ohne gemeinsamen Anfang),
+          # Inhalt aber genau wie die neue Version – eigene Änderungen am Code gehen dabei verloren.
+          git merge --no-edit --allow-unrelated-histories -s ours "$ZIEL" -m "Update auf $ZIEL"
+          git read-tree -u --reset "$ZIEL"
+          # Abläufe nicht anfassen: GitHub erlaubt automatischen Abläufen keine Änderungen daran
+          git restore --source=HEAD --staged --worktree -- .github/workflows || true
+          git commit --amend --no-edit
+          git push origin HEAD:${{ github.event.repository.default_branch }}
+          echo "Fertig: jetzt $ZIEL – Vercel veröffentlicht die neue Version automatisch."

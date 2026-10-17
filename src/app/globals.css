@@ -1,0 +1,359 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Dunkelmodus: wie das Gerät, außer es wurde in der App Hell oder Dunkel gewählt (<html data-theme>) */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-app-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-app-mono), ui-monospace, monospace;
+  --font-coaster: var(--font-app-coaster), ui-rounded, sans-serif;
+  --font-receipt: var(--font-app-receipt), ui-monospace, monospace;
+  --font-heading: var(--font-app-heading), ui-sans-serif, system-ui, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --color-success: var(--success);
+  --color-highlight: var(--highlight);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/*
+ * Stil „Apple mit Glas“: ruhige Flächen wie in iOS/iPadOS, Glas nur für schwebende Bedienelemente.
+ * Systemschrift des Geräts (SF Pro auf Apple, Roboto auf Android, Segoe auf Windows) – nichts wird geladen.
+ * Farbthema über <html data-accent="…">, ohne Angabe Blau. Hell/Dunkel folgt dem Gerät.
+ */
+:root {
+  color-scheme: light;
+  --font-app-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-app-heading: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Farbthema (Blau ist der Standard) */
+  --tint-light: #007aff;
+  --tint-dark: #0a84ff;
+  --on-tint-light: #ffffff;
+  --on-tint-dark: #ffffff;
+  --tint-2: #30b0c7;
+  --print: #0b4f9c;
+  --tint: var(--tint-light);
+  --on-tint: var(--on-tint-light);
+
+  --background: #f2f2f7;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: var(--tint);
+  --primary-foreground: var(--on-tint);
+  --secondary: rgb(120 120 128 / 0.12);
+  --secondary-foreground: var(--tint);
+  --muted: rgb(120 120 128 / 0.1);
+  --muted-foreground: #6c6c70;
+  --accent: rgb(120 120 128 / 0.12);
+  --accent-foreground: #000000;
+  /* Orange: „hier handeln“ (Bezahlen, Hinweise) */
+  --highlight: #f27a00;
+  --highlight-foreground: #ffffff;
+  --success: #248a3d;
+  --destructive: #e5372c;
+  --border: rgb(60 60 67 / 0.14);
+  --input: rgb(60 60 67 / 0.2);
+  --ring: var(--tint);
+  --chart-1: var(--tint);
+  --chart-2: #ff9500;
+  --chart-3: #30b0c7;
+  --chart-4: #ffcc00;
+  --chart-5: #5856d6;
+  --radius: 0.75rem;
+  --shadow-color: rgb(20 40 80 / 0.22);
+
+  /* Glas für schwebende Leisten */
+  /* Glas-Stärke 0 (klar) … 1 (milchig), je Gerät in den Einstellungen wählbar (<html style="--glass-strength">) */
+  --glass-strength: 0.5;
+  --glass: rgb(255 255 255 / calc(0.08 + 0.56 * var(--glass-strength)));
+  --glass-sheen: rgb(255 255 255 / calc(0.15 + 0.5 * var(--glass-strength)));
+  --glass-border: rgb(255 255 255 / 0.7);
+  --glass-highlight: rgb(255 255 255 / 0.95);
+  --glass-shadow: rgb(20 40 80 / 0.12);
+  --glass-solid: rgb(250 250 252 / 0.97);
+  /* zarter Schimmer der Vereinsfarbe hinter dem Glas */
+  --glow-1: color-mix(in srgb, var(--tint) 22%, transparent);
+  --glow-2: color-mix(in srgb, var(--tint-2) 18%, transparent);
+
+  --sidebar: var(--glass);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--tint);
+  --sidebar-primary-foreground: var(--on-tint);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--tint);
+}
+
+/* Dunkle Farbwerte – gelten automatisch (Gerät dunkel, keine Wahl in der App) oder bei Wahl „Dunkel“ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --tint: var(--tint-dark);
+    --on-tint: var(--on-tint-dark);
+    --background: #000000;
+    --foreground: #ffffff;
+    --card: #1c1c1e;
+    --card-foreground: #ffffff;
+    --popover: #2c2c2e;
+    --popover-foreground: #ffffff;
+    --secondary: rgb(118 118 128 / 0.24);
+    --muted: rgb(118 118 128 / 0.18);
+    --muted-foreground: #a1a1a8;
+    --accent: rgb(118 118 128 / 0.24);
+    --accent-foreground: #ffffff;
+    --highlight: #ff9f0a;
+    --highlight-foreground: #1c1c1e;
+    --success: #30d158;
+    --destructive: #ff453a;
+    --border: rgb(255 255 255 / 0.12);
+    --input: rgb(255 255 255 / 0.16);
+    --chart-2: #ff9f0a;
+    --chart-3: #40c8e0;
+    --chart-4: #ffd60a;
+    --chart-5: #5e5ce6;
+    --shadow-color: rgb(0 0 0 / 0.6);
+    --glass: rgb(62 62 70 / calc(0.3 + 0.56 * var(--glass-strength)));
+    --glass-sheen: rgb(255 255 255 / calc(0.06 + 0.2 * var(--glass-strength)));
+    --glass-border: rgb(255 255 255 / 0.2);
+    --glass-highlight: rgb(255 255 255 / 0.28);
+    --glass-shadow: rgb(0 0 0 / 0.55);
+    --glass-solid: rgb(36 36 40 / 0.97);
+    --glow-1: color-mix(in srgb, var(--tint) 40%, transparent);
+    --glow-2: color-mix(in srgb, var(--tint-2) 26%, transparent);
+  }
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --tint: var(--tint-dark);
+    --on-tint: var(--on-tint-dark);
+    --background: #000000;
+    --foreground: #ffffff;
+    --card: #1c1c1e;
+    --card-foreground: #ffffff;
+    --popover: #2c2c2e;
+    --popover-foreground: #ffffff;
+    --secondary: rgb(118 118 128 / 0.24);
+    --muted: rgb(118 118 128 / 0.18);
+    --muted-foreground: #a1a1a8;
+    --accent: rgb(118 118 128 / 0.24);
+    --accent-foreground: #ffffff;
+    --highlight: #ff9f0a;
+    --highlight-foreground: #1c1c1e;
+    --success: #30d158;
+    --destructive: #ff453a;
+    --border: rgb(255 255 255 / 0.12);
+    --input: rgb(255 255 255 / 0.16);
+    --chart-2: #ff9f0a;
+    --chart-3: #40c8e0;
+    --chart-4: #ffd60a;
+    --chart-5: #5e5ce6;
+    --shadow-color: rgb(0 0 0 / 0.6);
+    --glass: rgb(62 62 70 / calc(0.3 + 0.56 * var(--glass-strength)));
+    --glass-sheen: rgb(255 255 255 / calc(0.06 + 0.2 * var(--glass-strength)));
+    --glass-border: rgb(255 255 255 / 0.2);
+    --glass-highlight: rgb(255 255 255 / 0.28);
+    --glass-shadow: rgb(0 0 0 / 0.55);
+    --glass-solid: rgb(36 36 40 / 0.97);
+    --glow-1: color-mix(in srgb, var(--tint) 40%, transparent);
+    --glow-2: color-mix(in srgb, var(--tint-2) 26%, transparent);
+}
+
+/* Farbthemen (Vereinsfarbe). Jede Farbe ist in Hell und Dunkel auf Lesbarkeit geprüft. */
+html[data-accent="petrol"] { --tint-light: #0e7c86; --tint-dark: #2ab3c0; --on-tint-dark: #001f22; --tint-2: #34c759; --print: #0a5a62; }
+html[data-accent="gruen"] { --tint-light: #1f8a3b; --tint-dark: #30d158; --on-tint-dark: #002a0c; --tint-2: #30b0c7; --print: #1b6b30; }
+html[data-accent="gold"] { --tint-light: #a87400; --tint-dark: #ffd60a; --on-tint-dark: #2a2000; --tint-2: #ff9500; --print: #8a5d00; }
+html[data-accent="rot"] { --tint-light: #d70015; --tint-dark: #ff453a; --on-tint-dark: #ffffff; --tint-2: #ff9500; --print: #a50f1f; }
+html[data-accent="lila"] { --tint-light: #8944ab; --tint-dark: #bf5af2; --on-tint-dark: #ffffff; --tint-2: #5856d6; --print: #5e2a84; }
+html[data-accent="graphit"] { --tint-light: #3a3a3c; --tint-dark: #e5e5ea; --on-tint-dark: #1c1c1e; --tint-2: #8e8e93; --print: #2c2c2e; }
+
+/* Eigene Vereinsfarbe: Regler mit Farbverlauf als Leiste (Verlauf kommt per style), großer runder Griff */
+.range-farbe {
+  appearance: none;
+  height: 1.75rem;
+  width: 100%;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.range-farbe:disabled {
+  opacity: 0.6;
+}
+.range-farbe::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.35), inset 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+.range-farbe::-moz-range-thumb {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
+}
+.range-farbe:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--ring) 50%, transparent);
+  outline-offset: 2px;
+}
+
+/* Hintergrund mit zartem Schimmer, damit das Glas etwas zum Durchscheinen hat */
+@utility bg-app {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(56rem 30rem at 8% -12rem, var(--glow-1), transparent 70%),
+    radial-gradient(48rem 28rem at 96% -10rem, var(--glow-2), transparent 70%);
+  background-repeat: no-repeat;
+}
+/* Glas: halbdurchsichtig mit Unschärfe, Lichtkante oben, weicher Schatten */
+@utility glass {
+  background-color: var(--glass);
+  /* Lichtschimmer schräg über das Glas, an den Kanten heller */
+  background-image: linear-gradient(
+    135deg,
+    var(--glass-sheen),
+    transparent 36%,
+    transparent 64%,
+    color-mix(in srgb, var(--glass-sheen) 55%, transparent)
+  );
+  -webkit-backdrop-filter: blur(calc(6px + 32px * var(--glass-strength))) saturate(190%);
+  backdrop-filter: blur(calc(6px + 32px * var(--glass-strength))) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgb(255 255 255 / 0.1),
+    0 10px 32px var(--glass-shadow);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background-color: var(--glass-solid);
+    background-image: none;
+  }
+}
+/* Die Vereinsfarbe als ruhige Fläche */
+@utility bg-brand {
+  background-color: var(--tint);
+}
+@utility bg-brand-vertical {
+  background-color: var(--tint);
+}
+@utility shadow-soft {
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.04),
+    0 8px 28px -16px var(--shadow-color);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-app text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+/* Druck: A4, QR-Karten 2 × 4 pro Blatt */
+@page {
+  size: A4;
+  margin: 10mm;
+}
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .glass {
+    background: white;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .qr-sheet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .qr-card {
+    height: 69mm;
+    break-inside: avoid;
+    border-radius: 0;
+  }
+  /* Aufsteller: zwei Hälften einer A4-Seite (277 mm hoch ohne Rand) */
+  .tent-half {
+    height: 138mm;
+  }
+}
+
+/* Bierdeckel: neue Striche werden „gezeichnet“ */
+@keyframes tally-draw {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.tally-new {
+  stroke-dasharray: 40;
+  animation: tally-draw 0.6s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tally-new {
+    animation: none;
+  }
+}

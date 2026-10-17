@@ -1,0 +1,23 @@
+# Optional: PostgreSQL statt der eingebauten Datenbank.
+#   docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d
+# Passwort unten ändern (an beiden Stellen gleich).
+services:
+  vereinsdeckel:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://vereinsdeckel:BITTE-AENDERN@postgres:5432/vereinsdeckel
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    volumes:
+      - ./daten/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: vereinsdeckel
+      POSTGRES_PASSWORD: BITTE-AENDERN
+      POSTGRES_DB: vereinsdeckel
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vereinsdeckel"]
+      interval: 5s
+      retries: 10

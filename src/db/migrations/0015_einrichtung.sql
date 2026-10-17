@@ -1,0 +1,1 @@
+ALTER TABLE "settings" ADD COLUMN "setup_done_at" timestamp with time zone;

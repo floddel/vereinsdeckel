@@ -1,0 +1,15 @@
+# Vereinsdeckel mit Docker starten:  docker compose up -d
+# Die Daten liegen im Ordner ./daten neben dieser Datei – diesen Ordner sichern.
+# Den Einrichtungs-Code für /einrichten zeigt:  docker compose logs vereinsdeckel
+services:
+  vereinsdeckel:
+    image: ghcr.io/floddel/vereinsdeckel:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./daten:/data
+    environment:
+      # Feste Adresse für Mitglieder-Links und QR-Karten (sobald die App über HTTPS erreichbar ist):
+      # APP_URL: https://theke.mein-verein.de
+      TZ: Europe/Berlin

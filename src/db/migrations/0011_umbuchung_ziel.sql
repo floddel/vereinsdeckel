@@ -1,0 +1,2 @@
+ALTER TABLE "sale" ADD COLUMN "moved_to_member_id" uuid;--> statement-breakpoint
+ALTER TABLE "sale" ADD CONSTRAINT "sale_moved_to_member_id_member_id_fk" FOREIGN KEY ("moved_to_member_id") REFERENCES "public"."member"("id") ON DELETE no action ON UPDATE no action;

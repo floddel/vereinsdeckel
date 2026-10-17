@@ -1,0 +1,1 @@
+ALTER TABLE "settings" ALTER COLUMN "club_name" SET DEFAULT 'Mein Verein';

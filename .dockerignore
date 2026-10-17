@@ -1,0 +1,19 @@
+# Nicht ins Docker-Abbild: Abhängigkeiten werden dort frisch installiert, Daten und Geheimnisse bleiben draußen
+node_modules
+.next
+.data
+daten
+.env
+.env.*
+!.env.example
+.git
+.github
+.claude
+.vercel
+.neon
+.mcp.json
+skills-lock.json
+test-results
+playwright-report
+blob-report
+*.tsbuildinfo

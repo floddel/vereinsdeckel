@@ -1,0 +1,1 @@
+ALTER TABLE "article" ADD COLUMN "available" boolean DEFAULT true NOT NULL;
