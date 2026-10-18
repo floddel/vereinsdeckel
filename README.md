@@ -3,6 +3,9 @@
 **Der digitale Bierdeckel für Vereine** – Theke auf dem Tablet, Bierdeckel auf dem Handy,
 Bestand und Kasse im Blick. Kostenlos und frei (AGPL-3.0).
 
+**Ausprobieren:** [Demo starten auf floddel.de](https://floddel.de/#kurs) – eure eigene Demo mit erfundenen
+Daten, ohne Anmeldung und ohne Installation. Sie läuft 30 Minuten, danach wird alles gelöscht.
+
 ## Was er kann
 
 - **Theke auf dem Tablet:** Mitglied antippen, Getränke und Essen buchen, Gäste, Storno, Umbuchen –
