@@ -219,6 +219,7 @@ export function PinForm() {
             <TextField label="Neue PIN" name="newPin" error={e.newPin} description="4 bis 8 Ziffern" {...pinProps} />
             <TextField label="Neue PIN wiederholen" name="newPin2" error={e.newPin2} {...pinProps} />
           </div>
+          <FormError message={state && !state.ok ? state.error : undefined} />
           <div>
             <SubmitButton variant="outline">PIN ändern</SubmitButton>
           </div>

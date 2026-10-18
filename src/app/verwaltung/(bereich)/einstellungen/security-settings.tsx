@@ -4,7 +4,7 @@ import { KeyRound, LogOut, MonitorSmartphone, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { ActionForm, SubmitButton, TextField } from "@/components/form";
+import { ActionForm, FormError, SubmitButton, TextField } from "@/components/form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -97,6 +97,7 @@ export function PasswordForm() {
             <TextField label="Neues Passwort" name="newPassword" autoComplete="new-password" error={e.newPassword} description="Mindestens 10 Zeichen" {...pw} />
             <TextField label="Neues Passwort wiederholen" name="newPassword2" autoComplete="new-password" error={e.newPassword2} {...pw} />
           </div>
+          <FormError message={state && !state.ok ? state.error : undefined} />
           <div>
             <SubmitButton variant="outline">Passwort ändern</SubmitButton>
           </div>

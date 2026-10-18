@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { refresh } from "next/cache";
 import { getDb } from "@/db/client";
 import { settings } from "@/db/schema";
+import { DEMO_DISABLED, isDemo } from "@/lib/demo";
 import { qrSvg } from "@/lib/qr";
 import { type ActionResult, zodFieldErrors } from "@/lib/form-utils";
 import { z } from "@/lib/z";
@@ -44,6 +45,7 @@ const passwordSchema = z
 /** Passwort ändern – und dabei alle anderen Geräte abmelden (dieses bleibt angemeldet). */
 export async function changePasswordAction(_prev: ActionResult | undefined, formData: FormData): Promise<ActionResult> {
   const { session } = await requireVerwaltung();
+  if (isDemo()) return { ok: false, error: DEMO_DISABLED };
   const parsed = passwordSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { ok: false, fieldErrors: zodFieldErrors(parsed.error) };
   try {
@@ -76,6 +78,7 @@ export type TwoFactorSetup =
  */
 export async function startTwoFactorAction(password: string): Promise<TwoFactorSetup> {
   await requireVerwaltung();
+  if (isDemo()) return { ok: false, error: DEMO_DISABLED };
   if (typeof password !== "string" || !password) return { ok: false, error: "Bitte das Passwort eingeben" };
   const [s] = await getDb().select({ clubName: settings.clubName }).from(settings).where(eq(settings.id, 1));
   try {

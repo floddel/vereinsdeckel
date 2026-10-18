@@ -6,6 +6,7 @@ import { z } from "@/lib/z";
 import { getDb } from "@/db/client";
 import { file, settings } from "@/db/schema";
 import { isAccent } from "@/lib/accent";
+import { DEMO_DISABLED, isDemo } from "@/lib/demo";
 import { type ActionResult, zodFieldErrors } from "@/lib/form-utils";
 import { detectImageType, MAX_IMAGE_BYTES } from "@/lib/image";
 import { parseEuroToCents } from "@/lib/money";
@@ -61,6 +62,7 @@ export async function saveAccentAction(accent: string): Promise<ActionResult> {
 
 export async function uploadLogoAction(_prev: ActionResult | undefined, formData: FormData): Promise<ActionResult> {
   await requireVerwaltung();
+  if (isDemo()) return { ok: false, error: DEMO_DISABLED };
   const upload = formData.get("logo");
   if (!(upload instanceof File) || upload.size === 0) return { ok: false, error: "Bitte ein Bild wählen" };
   if (upload.size > MAX_IMAGE_BYTES) return { ok: false, error: "Bild ist zu groß" };
@@ -92,6 +94,7 @@ export async function removeLogoAction(): Promise<void> {
 
 export async function changePinAction(_prev: ActionResult | undefined, formData: FormData): Promise<ActionResult> {
   await requireVerwaltung();
+  if (isDemo()) return { ok: false, error: DEMO_DISABLED };
   const current = String(formData.get("currentPin") ?? "");
   const pin = String(formData.get("newPin") ?? "");
   const pin2 = String(formData.get("newPin2") ?? "");
@@ -117,6 +120,7 @@ const apiKeySchema = z
 /** Ein-/Ausschalten. Einschalten nur mit Schlüssel (in der App oder als Umgebungsvariable). */
 export async function setAiEnabledAction(enabled: boolean): Promise<ActionResult> {
   await requireVerwaltung();
+  if (isDemo()) return { ok: false, error: DEMO_DISABLED };
   const db = getDb();
   if (enabled && !(await getAiSettings(db)).keyHint) return { ok: false, error: "Bitte zuerst einen API-Schlüssel hinterlegen" };
   await db.update(settings).set({ aiReceiptsEnabled: enabled, updatedAt: new Date() }).where(eq(settings.id, 1));
@@ -127,6 +131,7 @@ export async function setAiEnabledAction(enabled: boolean): Promise<ActionResult
 /** Schlüssel prüfen und verschlüsselt speichern. Er wird danach nie wieder vollständig angezeigt. */
 export async function saveApiKeyAction(key: string): Promise<ActionResult> {
   await requireVerwaltung();
+  if (isDemo()) return { ok: false, error: DEMO_DISABLED };
   const parsed = apiKeySchema.safeParse(key);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message };
   const check = await checkApiKey(parsed.data);

@@ -2,6 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 import { AUTH_FILE, NO_AUTH } from "./tests/e2e/fixtures";
 
 const PORT = 3100;
+/** Zweiter Server derselben App im Demo-Betrieb (DEMO_MODE=1) */
+const DEMO_PORT = 3101;
 
 /**
  * Ende-zu-Ende-Tests in echten Browsern.
@@ -9,6 +11,7 @@ const PORT = 3100;
  * - tests/e2e/theke, verwaltung: Tablet (quer + hoch) und Desktop
  * - tests/e2e/mitglied:  Smartphones (iPhone, Android mit 360 px Breite)
  * - tests/e2e/allgemein: alle Geräte
+ * - tests/e2e/demo:      Demo-Betrieb auf eigenem Server (Desktop)
  */
 export default defineConfig({
   testDir: "tests/e2e",
@@ -57,6 +60,11 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], colorScheme: process.env.DOKU_DUNKEL ? "dark" : "light" },
     },
     {
+      name: "demo",
+      testMatch: /demo\/.*\.spec\.ts/,
+      use: { ...devices["Desktop Chrome"], baseURL: `http://localhost:${DEMO_PORT}`, storageState: NO_AUTH },
+    },
+    {
       name: "iphone",
       testMatch: /(mitglied|allgemein)\/.*\.spec\.ts/,
       dependencies: ["setup"],
@@ -93,6 +101,20 @@ export default defineConfig({
         SETUP_CODE: "einrichtungs-code-nur-fuer-tests",
         // Kassenbon-Erkennung gegen den Schein-Anthropic
         ANTHROPIC_BASE_URL: "http://localhost:3199",
+      },
+    },
+    {
+      // Derselbe Build im Demo-Betrieb mit eigener Datenbank (startet erst, wenn der erste Server läuft)
+      command: `rm -rf .data/e2e-demo && npx next start -p ${DEMO_PORT}`,
+      url: `http://localhost:${DEMO_PORT}`,
+      timeout: 60_000,
+      reuseExistingServer: false,
+      env: {
+        PGLITE_DIR: ".data/e2e-demo",
+        DEMO_MODE: "1",
+        DEMO_ENDS_AT: "2030-01-01T13:35:00Z", // 14:35 Uhr in Berlin
+        BETTER_AUTH_URL: `http://localhost:${DEMO_PORT}`,
+        BETTER_AUTH_SECRET: "nur-fuer-tests-nur-fuer-tests-nur-fuer-tests",
       },
     },
   ],

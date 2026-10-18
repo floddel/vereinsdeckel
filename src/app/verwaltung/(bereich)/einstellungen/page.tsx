@@ -14,6 +14,7 @@ import { GlassSlider, ThemeSwitch } from "@/components/theme-switch";
 import { AiSettingsCard } from "./ai-settings";
 import { DevicesCard, PasswordForm, TwoFactorCard } from "./security-settings";
 import { isAccent } from "@/lib/accent";
+import { isDemo } from "@/lib/demo";
 import { AccentForm, GeneralSettingsForm, LogoForm, PinForm } from "./settings-forms";
 import { TestPhaseCard } from "./test-phase-card";
 
@@ -41,6 +42,12 @@ async function Settings() {
   ]);
   return (
     <div className="flex max-w-4xl flex-col gap-6">
+      {isDemo() && (
+        <p role="note" className="rounded-2xl bg-primary/10 p-4">
+          In der Demo ausgeschaltet: Passwort, PIN und zweiten Faktor ändern, Kassenbon-Erkennung, Vereinslogo und
+          eine Sicherung übernehmen.
+        </p>
+      )}
       <Card>
         <CardHeader>
           <CardTitle>Darstellung</CardTitle>

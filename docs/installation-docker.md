@@ -69,7 +69,7 @@ docker compose up -d
 
 Nötige Datenbank-Änderungen spielt der Vereinsdeckel beim Start selbst ein. Vorher eine Sicherung
 machen. Eine bestimmte Version statt der neuesten: in `docker-compose.yml` z. B.
-`ghcr.io/floddel/vereinsdeckel:1.0.0` statt `:latest`.
+`ghcr.io/floddel/vereinsdeckel:1.1.0` statt `:latest`.
 
 ## PostgreSQL statt eingebauter Datenbank (optional)
 

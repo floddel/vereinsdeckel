@@ -44,6 +44,25 @@ Siehe [`.env.example`](../.env.example). Die wichtigsten:
 | `SETUP_CODE` | Einrichtungs-Code für das erste Konto (in Produktion Pflicht), mindestens 16 Zeichen |
 | `APP_URL` | Feste Adresse für Mitglieder-Links und QR-Codes (bei Vercel automatisch) |
 | `SOURCE_CODE_URL` | Link zum Quellcode einer veränderten Version (AGPL § 13) |
+| `DEMO_MODE` | Nur für Vorführungen: `1` schaltet den Demo-Betrieb ein (siehe unten) – im Verein nie setzen |
+
+## Demo-Betrieb
+
+Für Vorführungen gibt es einen Demo-Betrieb. Er ist nur an, wenn `DEMO_MODE=1` gesetzt ist.
+
+- Beim Start legt der Server in einer **frischen** Datenbank den erfundenen Verein „TSV Musterstadt“ an:
+  Mitglieder, drei vergangene Abende, offene Deckel von heute, Tagesgericht, Tipp des Hauses und eine
+  Handy-Bestellung (`src/server/demo-data.ts`). Gibt es schon ein Konto, wird nichts angelegt.
+- Die Anmeldung ist schon ausgefüllt (`demo@example.org`, Passwort `vereinsdeckel`, PIN `1234`).
+- Jede Seite zeigt unten rechts „Demo“, mit `DEMO_ENDS_AT` (ISO-Zeit, z. B. `2026-10-18T12:35:00Z`) auch bis wann.
+- Ausgeschaltet sind Passwort, PIN und zweiten Faktor ändern, die Kassenbon-Erkennung, das Vereinslogo und
+  das Übernehmen einer Sicherung.
+
+Zum Ausprobieren mit eigener Datenbank:
+
+```bash
+rm -rf .data/demo && DEMO_MODE=1 PGLITE_DIR=.data/demo npm run dev
+```
 
 ## Lizenz
 

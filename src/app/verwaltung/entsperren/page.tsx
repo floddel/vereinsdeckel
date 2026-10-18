@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { AuthFrame } from "@/components/auth-frame";
+import { DEMO_LOGIN, isDemo } from "@/lib/demo";
 import { safeNextPath } from "@/lib/safe-next";
 import { requireAdmin } from "@/server/session";
 import { UnlockForm } from "./unlock-form";
@@ -23,5 +24,5 @@ export default function EntsperrenPage({ searchParams }: PageProps<"/verwaltung/
 async function UnlockGate({ searchParams }: Pick<PageProps<"/verwaltung/entsperren">, "searchParams">) {
   await requireAdmin();
   const { next } = await searchParams;
-  return <UnlockForm next={safeNextPath(next, "/verwaltung")} />;
+  return <UnlockForm next={safeNextPath(next, "/verwaltung")} demoPin={isDemo() ? DEMO_LOGIN.pin : undefined} />;
 }

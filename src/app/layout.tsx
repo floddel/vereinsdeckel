@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import { ClubAccent } from "@/components/club-accent";
+import { DemoNote } from "@/components/demo-note";
 import { ArticleArtSprite } from "@/components/icons/article-art";
 import { Toaster } from "@/components/ui/sonner";
 import { fontMono } from "@/fonts";
@@ -40,6 +41,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <Suspense fallback={null}>
           <ClubAccent />
+        </Suspense>
+        <Suspense fallback={null}>
+          <DemoNote />
         </Suspense>
         <Toaster position="top-center" richColors />
       </body>

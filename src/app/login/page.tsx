@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { AuthFrame } from "@/components/auth-frame";
+import { DEMO_LOGIN, isDemo } from "@/lib/demo";
 import { safeNextPath } from "@/lib/safe-next";
 import { adminExists } from "@/server/auth";
 import { getAdminSession } from "@/server/session";
@@ -22,5 +23,10 @@ async function LoginGate({ searchParams }: Pick<PageProps<"/login">, "searchPara
   const { next } = await searchParams;
   if (!(await adminExists())) redirect("/einrichten");
   if (await getAdminSession()) redirect(safeNextPath(next, "/theke"));
-  return <LoginForm next={typeof next === "string" ? next : undefined} />;
+  return (
+    <LoginForm
+      next={typeof next === "string" ? next : undefined}
+      demo={isDemo() ? { email: DEMO_LOGIN.email, password: DEMO_LOGIN.password } : undefined}
+    />
+  );
 }

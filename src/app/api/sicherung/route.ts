@@ -2,6 +2,7 @@ import { connection } from "next/server";
 import { getDb } from "@/db/client";
 import { settings } from "@/db/schema";
 import { businessDate } from "@/domain/business-date";
+import { DEMO_DISABLED, isDemo } from "@/lib/demo";
 import { backupFileName, exportBackup, importBackup, type ImportMode, parseBackup } from "@/server/backup";
 import { invalidatePublicMenu } from "@/server/menu";
 import { forbidden, verwaltungAllowed } from "@/server/pdf/guard";
@@ -27,6 +28,8 @@ export async function POST(request: Request) {
   await connection();
   if (!isSameOrigin(request)) return Response.json({ ok: false, error: "Nicht erlaubt" }, { status: 403 });
   if (!(await verwaltungAllowed())) return forbidden();
+  // Demo: keine fremden Daten und Bilder übernehmen
+  if (isDemo()) return Response.json({ ok: false, error: DEMO_DISABLED }, { status: 403 });
   let form: FormData;
   try {
     form = await request.formData();
